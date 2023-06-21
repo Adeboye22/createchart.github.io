@@ -1,22 +1,23 @@
 import React, { useEffect, useState } from 'react'
 import Chart from 'react-apexcharts'
-import Api from '../api/posts'
 
 const Charts = () => {
   const [ averageTemp, setAverageTemp ] = useState([]);
   const [ date, setDate ] = useState([]);
 
   useEffect( () => {
-    const fetchData = async() => {
+    const getData = async() => {
+    const url = ('http://localhost:8000/temperature')
       try{
-        const data = await Api.get('temperature')
-        setAverageTemp(data?.map((item) => item.average_temp))
-        setDate(data?.map((item) => item.date))
+        const response = await fetch(url)
+        const data = await response.json()
+        setAverageTemp(data?.map((item) => item.average_temp));
+        setDate(data?.map((item) => item.date));
       } catch(error){
         console.log(error)
       }
     };
-    fetchData();
+    getData();
   }, [])
 
   const series = [ //data on the y-axis
